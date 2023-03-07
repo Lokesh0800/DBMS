@@ -1,0 +1,103 @@
+{% extends 'adminpage.html' %}
+
+{% block style_block %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block body_block %}
+<div class="container mx-2">
+<div class="text-right my-4">
+  <button class="btn btn-primary" data-toggle="modal" data-target="#empmodal">+ Add Employee</button>
+</div>
+<div>
+
+  <table id="example" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+          {% for field in fields %}
+            <th>{{field.name}}</th>
+            {% endfor %}
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for data2 in empobj %}
+        <tr>
+            <td>{{data2.id}}</td>
+            <td>{{data2.Empname}}</td>
+            <td>{{data2.Designation}}</td>
+            <td>{{data2.Department}}</td>
+            <td>{{data2.DOJ}}</td>
+            <td>{{data2.Contact}}</td>
+            <td>{{data2.CTC}}</td>
+            <td><a href="{% url 'delete_employees' data2.id %}" style="text-decoration: None;"><button class="btn btn-danger" >Del</button> <a href="{% url 'update_employees' data2.id %}" style="text-decoration: None;"><button class="btn btn-secondary">Edit</button></a></td>
+        </tr>
+        {% endfor %}     
+        </tbody>
+  </table>
+  
+</div>
+
+<!--empmodal-->
+<div class="modal fade" id="empmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Add Employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="employees" method="post">
+        {% csrf_token %}
+      {{ form.as_p }}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<!--Update empmodal-->
+<div class="modal fade" id="update_empmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Add Employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="" method="post">
+        {% csrf_token %}
+          {{ form.as_p }}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+
+{% block script_block %}
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#example').DataTable();
+});
+
+var data2 = "{{update_status}}" 
+if (data2 == 1){
+  console.log(data2);
+  $('#update_empmodal').modal('show');
+}
+
+</script>
+
+
+{% endblock %}
